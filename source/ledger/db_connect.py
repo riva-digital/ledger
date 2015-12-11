@@ -11,7 +11,7 @@ import MySQLdb
 
 
 class RivaDatabase(object):
-    def __init__(self, hostname="", port="", dbname="", dbuser="", passwd=""):
+    def __init__(self, hostname="", port=3306, dbname="", dbuser="", passwd=""):
         """
         Initialize the RivaDatabase object
         :param hostname: The IP Address
@@ -24,7 +24,7 @@ class RivaDatabase(object):
         self.__db_host = ""
         self.set_db_host(hostname)
 
-        self.__db_port = ""
+        self.__db_port = 3306
         self.set_db_port(port)
 
         self.__db_name = ""
@@ -56,16 +56,13 @@ class RivaDatabase(object):
         """
         return self.__db_host
 
-    def set_db_port(self, port=""):
+    def set_db_port(self, port=3306):
         """
         Sets the port on which to access the database on the server. 3306 is the default
         :param port: The port number
         :return: None
         """
-        if port == "":
-            self.__db_port = "3306"
-        else:
-            self.__db_port = port
+        self.__db_port = port
 
     def get_db_port(self):
         """
@@ -114,9 +111,9 @@ class RivaDatabase(object):
         :return: None
         """
         if passwd == "":
-            passwd = base64.b64decode("cml2YTAx")
+            passwd = "cml2YTAx"
         else:
-            passwd = base64.b64decode(passwd)
+            passwd = passwd
         self.__db_pass = passwd
 
     def get_db_password(self):
@@ -132,7 +129,7 @@ class RivaDatabase(object):
                                   user=self.get_db_user(),
                                   passwd=self.get_db_password())
 
-        self.db_cursor = self.db.cursor()
+        self.db_cursor = self.db.cursor(MySQLdb.cursors.DictCursor)
 
 
 if "__name__" == "__main__":

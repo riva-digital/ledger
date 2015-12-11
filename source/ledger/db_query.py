@@ -116,12 +116,18 @@ def query_db(riva_db_obj, query_str):
     :param query_str: The query string to feed to the RivaDatabase
     :return: dict The key-value pairs of the return from the database
     """
-    pass
+    riva_db_obj.db_cursor.execute(query_str)
+    return riva_db_obj.db_cursor.fetchall()
 
 
 if __name__ == "__main__":
-    print generate_query_str(["firstname", "lastname", "empcode"],
-                             ["users"],
-                             where_and_or=[[("username", "=", "'akulmi'"), ("departmentid", "=", "1")],
-                                           [("username", "=", "'mukund.d'"), ("departmentid", "=", "1")]])
+    q_str = generate_query_str(["firstname", "lastname", "empcode"],
+                               ["users"],
+                               where_and_or=[[("username", "=", "'akulmi'"), ("departmentid", "=", "1")],
+                                             [("username", "=", "'mukund.d'"), ("departmentid", "=", "1")]])
+
+    rdb = db_connect.RivaDatabase(dbname="riva_users_prototype", dbuser="root")
+    rdb.connect()
+    print query_db(rdb, q_str)
+    rdb.db.close()
 
