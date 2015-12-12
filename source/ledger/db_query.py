@@ -106,23 +106,6 @@ def generate_query_str(select_data=[], from_tables=[], where_and=[], where_or=[]
     return query_str + ";"
 
 
-def query_db(riva_db_obj, query_str):
-    """
-    This is going to send the query to the database and return a dict which contains
-    the return values from the database.
-    :param riva_db_obj: The RivaDatabase object
-    :param query_str: The query string to feed to the RivaDatabase
-    :return: dict The key-value pairs of the return from the database
-    """
-    try:
-        riva_db_obj.db_cursor.execute(query_str)
-    except Exception, e:
-        print "An exception was caught: "
-        print e
-        return {}
-    return riva_db_obj.db_cursor.fetchall()
-
-
 if __name__ == "__main__":
     import db_connect
     q_str = generate_query_str(["a.firstname", "a.lastname", "a.empcode", "b.departmentname"],
@@ -133,6 +116,6 @@ if __name__ == "__main__":
     print q_str
     rdb = db_connect.RivaDatabase(dbname="riva_users_prototype", dbuser="root")
     rdb.connect()
-    print query_db(rdb, q_str)
-    rdb.db.close()
+    print rdb.query(q_str)
+    rdb.close()
 

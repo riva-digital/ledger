@@ -131,6 +131,23 @@ class RivaDatabase(object):
 
         self.db_cursor = self.db.cursor(MySQLdb.cursors.DictCursor)
 
+    def query(self, query_str):
+        """
+        Queries the current database with the supplied query string.
+        :param query_str: The Query string for the MySQL db
+        :return: dict Values and their row names.
+        """
+        try:
+            self.db_cursor.execute(query_str)
+        except Exception, e:
+            print "An exception was caught: "
+            print e
+            return {}
+        return self.db_cursor.fetchall()
+
+    def close(self):
+        self.db.close()
+
 
 if "__name__" == "__main__":
     pass
