@@ -4,8 +4,6 @@
 """
 __author__ = "mdhananjay"
 
-import db_connect
-
 
 def generate_query_str(select_data=[], from_tables=[], where_and=[], where_or=[], where_and_or=[]):
     """
@@ -116,16 +114,23 @@ def query_db(riva_db_obj, query_str):
     :param query_str: The query string to feed to the RivaDatabase
     :return: dict The key-value pairs of the return from the database
     """
-    riva_db_obj.db_cursor.execute(query_str)
+    try:
+        riva_db_obj.db_cursor.execute(query_str)
+    except Exception, e:
+        print "An exception was caught: "
+        print e
+        return {}
     return riva_db_obj.db_cursor.fetchall()
 
 
 if __name__ == "__main__":
-    q_str = generate_query_str(["firstname", "lastname", "empcode"],
-                               ["users"],
-                               where_and_or=[[("username", "=", "'akulmi'"), ("departmentid", "=", "1")],
-                                             [("username", "=", "'mukund.d'"), ("departmentid", "=", "1")]])
+    import db_connect
+    q_str = generate_query_str(["a.firstname", "a.lastname", "a.empcode", "b.departmentname"],
+                               ["users a", "department b"],
+                               where_and_or=[[("a.username", "=", "'akulmi'"), ("a.departmentid", "=", "b.departmentid")],
+                                             [("a.username", "=", "'mukund.d'"), ("a.departmentid", "=", "b.departmentid")]])
 
+    print q_str
     rdb = db_connect.RivaDatabase(dbname="riva_users_prototype", dbuser="root")
     rdb.connect()
     print query_db(rdb, q_str)
