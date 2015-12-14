@@ -23,7 +23,7 @@ def generate_query_str(select_data=[], from_tables=[], where_and=[], where_or=[]
     :param from_tables: A list of the tables to collect the fields from
     :param where_and: A list of tuples containing all values to be joined up using AND
     :param where_or: A list of tuples containing all values to be joined up using OR
-    :param where_and_or: A list of lists, with eac child list containing the tuples for the AND join
+    :param where_and_or: A list of lists, with each child list containing the tuples for the AND join
     :return: string The Query String, which is like SELECT * FROM * WHERE value is *
     """
     select_str = "SELECT "
@@ -113,7 +113,6 @@ if __name__ == "__main__":
                                where_and_or=[[("a.username", "=", "'akulmi'"), ("a.departmentid", "=", "b.departmentid")],
                                              [("a.username", "=", "'mukund.d'"), ("a.departmentid", "=", "b.departmentid")]])
 
-    print q_str
     rdb = db_connect.RivaDatabase(dbname="riva_users_prototype", dbuser="root")
     rdb.connect()
     print rdb.query(q_str)
