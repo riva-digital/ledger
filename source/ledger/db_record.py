@@ -37,6 +37,8 @@ def generate_insert_str(table_name="", param_list=[]):
     def_row_names.sort()
     def_row_count = len(def_row_names)
 
+    insert_str = "INSERT INTO %s VALUES (" % (table_name + " (" + ", ".join(def_row_names) + ")")
+
     values_list = []
     for p_dict in param_list:
         if len(p_dict.keys()) != def_row_count:
@@ -53,15 +55,20 @@ def generate_insert_str(table_name="", param_list=[]):
             values.append(p_dict.get(row))
         values_list.append(tuple(values))
 
-    insert_str = "\"\"\"INSERT INTO %s VALUES (" % (table_name + " (" + ", ".join(def_row_names) + ")")
-    for i in xrange(0, def_row_count):
-        insert_str += "%s, "
-    insert_str = insert_str[:-2] + ")\"\"\""
+    insert_str_list = []
+    for each in values_list:
+        insert_str_list.append(insert_str + ",".join(each) + ")")
 
-    return insert_str, values_list
+    return insert_str_list
 
 if __name__ == "__main__":
-    print generate_insert_str("department", [{"departmentname": "'layout'", "departmentcode": "'lay'"},
-                                             {"departmentname": "'lighting'", "departmentcode": "'lit'"},
-                                             {"departmentname": "'simulation'", "departmentcode": "'sim'"}])
+    import db_connect
+    insrt = generate_insert_str("department", [{"departmentname": "'script'", "departmentcode": "'scp'"},
+                                               {"departmentname": "'concept art'", "departmentcode": "'cat'"},
+                                               {"departmentname": "'hair'", "departmentcode": "'har'"}])
+
+    rdb = db_connect.RivaDatabase(dbname="riva_users_prototype", dbuser="root")
+    rdb.connect()
+    rdb.insert_record(insrt)
+    rdb.close()
 

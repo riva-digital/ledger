@@ -145,9 +145,25 @@ class RivaDatabase(object):
             return {}
         return self.db_cursor.fetchall()
 
+    def insert_record(self, record_str_list):
+        """
+        Inserts the records in the record_str_list sequentially.
+        :param record_str_list: list List of INSERT INTO commands
+        :return: int
+        """
+        error_stat = 1
+        for each_rec in record_str_list:
+            try:
+                self.db_cursor.execute(each_rec)
+                self.db.commit()
+            except Exception, e:
+                print e
+                error_stat = 0
+        return error_stat
+
     def close(self):
         self.db.close()
 
 
-if "__name__" == "__main__":
+if __name__ == "__main__":
     pass
