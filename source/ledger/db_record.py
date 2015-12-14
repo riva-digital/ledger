@@ -63,10 +63,12 @@ def generate_insert_str(table_name="", param_list=[]):
 
 if __name__ == "__main__":
     import db_connect
+    import pprint
     insrt = generate_insert_str("department", [{"departmentname": "'script'", "departmentcode": "'scp'"},
                                                {"departmentname": "'concept art'", "departmentcode": "'cat'"},
                                                {"departmentname": "'hair'", "departmentcode": "'har'"}])
 
+    pprint.pprint(insrt)
     rdb = db_connect.RivaDatabase(dbname="riva_users_prototype", dbuser="root")
     rdb.connect()
     rdb.insert_record(insrt)
